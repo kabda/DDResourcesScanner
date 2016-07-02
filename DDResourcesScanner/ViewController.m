@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "DDAnalysisManager.h"
-#import "DDSimilarImageCell.h"
 
 typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     DDScannerWorkFlowWaitingSelectPath,
@@ -91,6 +90,10 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
 }
 
 #pragma mark - DDAnalysisManagerDelegate
+- (void)analysisManager:(DDAnalysisManager *)manager didScanningImageWithPath:(NSString *)path {
+    self.contentLabel.stringValue = [NSString stringWithFormat:@"[正在扫描图片] %@", path];
+}
+
 - (void)analysisManager:(DDAnalysisManager *)manager didHandleImageWithPath:(NSString *)path progress:(double)progress {
     self.contentLabel.stringValue = [NSString stringWithFormat:@"[%0.2f%%] %@", progress * 100, path];
 }

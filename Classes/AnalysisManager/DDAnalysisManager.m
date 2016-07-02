@@ -7,10 +7,12 @@
 //
 
 #import "DDAnalysisManager.h"
+#import "NSMutableArray+Matrix.h"
 
 @interface DDAnalysisManager ()
 @property (nonatomic, strong) NSArray *allImages;
 @property (nonatomic, strong) NSArray *similarImages;
+
 @property (nonatomic, assign) long totalSize;
 @property (nonatomic, assign) long reduplicateSize;
 @end
@@ -37,9 +39,42 @@
                 DDImageModel *imageModel = [[DDImageModel alloc] init];
                 imageModel.path = fullPath;
                 imageModel.volume = fileSize.longValue / 1024.0;
-                [tmpImageModels addObject:imageModel];
+                imageModel.image = [[NSImage alloc] initWithContentsOfFile:fullPath];
+                imageModel.name = [[fullPath pathComponents] lastObject];
 
+                if ([imageModel.name containsString:@"@3x"]) {
+                    imageModel.scale = 3;
+                    
+                    NSRange range = [imageModel.name rangeOfString:@"@3x"];
+                    imageModel.simpleName = [imageModel.name substringToIndex:range.location];
+                    
+                } else if ([imageModel.name containsString:@"@2x"]) {
+                    imageModel.scale = 2;
+                    
+                    NSRange range = [imageModel.name rangeOfString:@"@2x"];
+                    imageModel.simpleName = [imageModel.name substringToIndex:range.location];
+                    
+                } else if ([imageModel.name containsString:@"@1x"]) {
+                    imageModel.scale = 1;
+                    
+                    NSRange range = [imageModel.name rangeOfString:@"@1x"];
+                    imageModel.simpleName = [imageModel.name substringToIndex:range.location];
+                } else {
+                    imageModel.scale = 1;
+                    
+                    NSRange range = [imageModel.name rangeOfString:@"."];
+                    imageModel.simpleName = [imageModel.name substringToIndex:range.location];
+                }
+                
+                [tmpImageModels addObject:imageModel];
+                
                 totalSize += imageModel.volume;
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([self.delegate respondsToSelector:@selector(analysisManager:didScanningImageWithPath:)]) {
+                        [self.delegate analysisManager:self didScanningImageWithPath:fullPath];
+                    }
+                });
             }
         }
 
@@ -61,50 +96,43 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
         NSArray *sourceImages = [[NSArray alloc] initWithArray:self.allImages];
-        NSMutableArray *similarImages = [[NSMutableArray alloc] init];
-        while (1) {
-            NSArray *tmpArray = [self findSimilarImagesFromSource:sourceImages fliteredImages:&sourceImages];
-            if (tmpArray.count == 0) {
-                break;
-            }
-            [similarImages addObjectsFromArray:tmpArray];
-        }
-
-        double reduplicateSize = 0.0;
-        for (DDImageModel *imageModel in similarImages) {
-            reduplicateSize += imageModel.volume;
-        }
-
-        NSUInteger total = sourceImages.count;
-        long factorial = getFactorial(total);
-        factorial = MAX(factorial, 1);
-        long count = 0;
-        for (NSInteger section = 0; section < total; section++) {
-            DDImageModel *imageModel0 = sourceImages[section];
-            for (NSInteger index = section + 1; index < total; index++) {
-
-                count++;
-
-                DDImageModel *imageModel1 = sourceImages[index];
-
+        NSUInteger length = sourceImages.count;
+        NSMutableArray *matrixArray = [NSMutableArray matrixArrayWithLength:length];
+        for (NSInteger section = 0; section < length; section++) {
+            DDImageModel *imageModel1 = (DDImageModel *)sourceImages[section];
+            for (NSInteger index = 0; index < length; index++) {
+                DDImageModel *imageModel2 = (DDImageModel *)sourceImages[index];
+                
+                NSInteger similarLevel = [imageModel1.image similarLevelWithAnotherImage:imageModel2.image];
+                
+                DDSimilarImagesModel *similarImagesModel = [[DDSimilarImagesModel alloc] init];
+                similarImagesModel.imageModel1 = imageModel1;
+                similarImagesModel.imageModel2 = imageModel2;
+                similarImagesModel.similarLevel = similarLevel;
+                similarImagesModel.col = index;
+                similarImagesModel.row = section;
+                [matrixArray setObject:similarImagesModel forCol:index atRow:section];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath:progress:)]) {
-                        [self.delegate analysisManager:self didHandleImageWithPath:imageModel1.path progress:(count * 1.0 / factorial)];
+                        [self.delegate analysisManager:self didHandleImageWithPath:imageModel2.path progress:((section * length + index) / (length * length))];
                     }
                 });
-                NSInteger similarLevel = [NSImage differentValueCountWithString:imageModel0.phaString andString:imageModel1.phaString];
-
-                if (similarLevel < 2) {
-                    if (![similarImages containsObject:imageModel0]) {
-                        [similarImages addObject:imageModel0];
-                        reduplicateSize += imageModel0.volume;
-                    }
-                    if (![similarImages containsObject:imageModel1]) {
-                        [similarImages addObject:imageModel1];
-                        reduplicateSize += imageModel1.volume;
-                    }
-                }
             }
+        }
+        double reduplicateSize = 0.0;
+        NSArray *similarImages =[matrixArray fliterObjectsWithCondition:^BOOL(id theObject) {
+                                    if ([theObject isKindOfClass:[DDSimilarImagesModel class]]) {
+                                        DDSimilarImagesModel *similarImagesModel = (DDSimilarImagesModel *)theObject;
+                                        return (similarImagesModel.similarLevel < similarLevel);
+                                    }
+                                    return NO;
+                                }];
+
+        
+        
+        for (DDImageModel *imageModel in similarImages) {
+            reduplicateSize += imageModel.volume;
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -117,36 +145,6 @@
             }
         });
     });
-}
-
-
-- (NSArray *)findSimilarImagesFromSource:(NSArray *)sourceImages fliteredImages:(NSArray **)fliteredImages {
-    NSMutableArray *tmpSimilarImages = [[NSMutableArray alloc] init];
-    NSMutableArray *tmpSourceImages = [[NSMutableArray alloc] initWithArray:sourceImages];
-    NSUInteger total = tmpSourceImages.count;
-    BOOL hasFound = NO;
-    for (NSInteger section = 0; section < total; section++) {
-        if (hasFound) {
-            break;
-        }
-        DDImageModel *imageModel0 = sourceImages[section];
-        for (NSInteger index = section + 1; index < total; index++) {
-            DDImageModel *imageModel1 = sourceImages[index];
-            if ([imageModel0.realName isEqualToString:imageModel1.realName] && imageModel0.scale != imageModel1.scale) {
-                continue;
-            }
-            NSInteger similarLevel = [NSImage differentValueCountWithString:imageModel0.phaString andString:imageModel1.phaString];
-            if (similarLevel < 2) {
-                hasFound = YES;
-                [tmpSimilarImages addObject:imageModel0];
-                [tmpSimilarImages addObject:imageModel1];
-                [tmpSourceImages removeObjectIdenticalTo:imageModel0];
-                [tmpSourceImages removeObjectIdenticalTo:imageModel1];
-            }
-        }
-    }
-    *fliteredImages = (NSArray *)[tmpSourceImages copy];
-    return [tmpSimilarImages copy];
 }
 
 @end

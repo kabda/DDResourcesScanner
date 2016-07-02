@@ -10,13 +10,15 @@
 
 @interface DDImageModel : NSObject
 
++ (instancetype)imageModelWithCol:(NSUInteger)col row:(NSUInteger)row;
+- (instancetype)initWithCol:(NSUInteger)col row:(NSUInteger)row;
+
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, assign) double volume;
 
-@property (nonatomic, strong, readonly) NSImage *image;
-@property (nonatomic, strong, readonly) NSString *phaString;
-@property (nonatomic, assign, readonly) NSInteger scale;
-@property (nonatomic, strong, readonly) NSString *name;
-@property (nonatomic, strong, readonly) NSString *realName;
+@property (nonatomic, strong) NSImage *image;
+@property (nonatomic, assign) NSInteger scale;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *simpleName;
 
 @end

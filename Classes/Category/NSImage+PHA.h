@@ -12,9 +12,7 @@
 
 @interface NSImage (PHA)
 
-+ (NSInteger)differentValueCountWithString:(NSString *)str1 andString:(NSString *)str2;
-+ (NSInteger)differentValueCountWithImage:(NSImage *)image1 andAnotherImage:(NSImage *)image2;
-- (NSInteger)differentValueCountWithdAnotherImage:(NSImage *)anotierImage;
-- (NSString *)pHashStringValueWithSize:(CGSize)size;
++ (NSInteger)similarLevelForImage:(NSImage *)image1 andAnotherImage:(NSImage *)image2;
+- (NSInteger)similarLevelWithAnotherImage:(NSImage *)image;
 
 @end
