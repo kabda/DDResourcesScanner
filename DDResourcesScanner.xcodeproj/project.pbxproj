@@ -10,7 +10,6 @@
 		8F10BFDB1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F10BFDA1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib */; };
 		8F10BFDD1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F10BFDC1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib */; };
 		8F10BFDF1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F10BFDE1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib */; };
-		8F838C031D27E95C00E5AA3D /* NSMutableArray+Matrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F838C021D27E95C00E5AA3D /* NSMutableArray+Matrix.m */; };
 		8F838C061D27F91B00E5AA3D /* DDSimilarImagesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F838C051D27F91B00E5AA3D /* DDSimilarImagesModel.m */; };
 		90C8DD121D24F94300FEC4A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD111D24F94300FEC4A0 /* AppDelegate.m */; };
 		90C8DD151D24F94300FEC4A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD141D24F94300FEC4A0 /* main.m */; };
@@ -26,8 +25,6 @@
 		8F10BFDA1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.13.dylib; path = ../../../../usr/local/lib/libopencv_core.2.4.13.dylib; sourceTree = "<group>"; };
 		8F10BFDC1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.2.4.13.dylib; path = ../../../../usr/local/lib/libopencv_highgui.2.4.13.dylib; sourceTree = "<group>"; };
 		8F10BFDE1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.2.4.13.dylib; path = ../../../../usr/local/lib/libopencv_imgproc.2.4.13.dylib; sourceTree = "<group>"; };
-		8F838C011D27E95C00E5AA3D /* NSMutableArray+Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Matrix.h"; sourceTree = "<group>"; };
-		8F838C021D27E95C00E5AA3D /* NSMutableArray+Matrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Matrix.m"; sourceTree = "<group>"; };
 		8F838C041D27F91B00E5AA3D /* DDSimilarImagesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSimilarImagesModel.h; sourceTree = "<group>"; };
 		8F838C051D27F91B00E5AA3D /* DDSimilarImagesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSimilarImagesModel.m; sourceTree = "<group>"; };
 		90C8DD0D1D24F94300FEC4A0 /* DDResourcesScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DDResourcesScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -131,8 +128,6 @@
 			children = (
 				90C8DD2B1D24F95A00FEC4A0 /* NSImage+PHA.h */,
 				90C8DD2C1D24F95A00FEC4A0 /* NSImage+PHA.mm */,
-				8F838C011D27E95C00E5AA3D /* NSMutableArray+Matrix.h */,
-				8F838C021D27E95C00E5AA3D /* NSMutableArray+Matrix.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -211,7 +206,6 @@
 				90C8DD331D24F95A00FEC4A0 /* DDAnalysisManager.m in Sources */,
 				90C8DD151D24F94300FEC4A0 /* main.m in Sources */,
 				90C8DD351D24F95A00FEC4A0 /* NSImage+PHA.mm in Sources */,
-				8F838C031D27E95C00E5AA3D /* NSMutableArray+Matrix.m in Sources */,
 				90C8DD3A1D2503BA00FEC4A0 /* DDImageModel.m in Sources */,
 				90C8DD121D24F94300FEC4A0 /* AppDelegate.m in Sources */,
 			);

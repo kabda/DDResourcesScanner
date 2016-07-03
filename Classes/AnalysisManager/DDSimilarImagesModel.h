@@ -12,9 +12,5 @@
 @interface DDSimilarImagesModel : NSObject
 @property (nonatomic, strong) DDImageModel *imageModel1;
 @property (nonatomic, strong) DDImageModel *imageModel2;
-
 @property (nonatomic, assign) NSInteger similarLevel;
-
-@property (nonatomic, assign) NSUInteger col;
-@property (nonatomic, assign) NSUInteger row;
 @end

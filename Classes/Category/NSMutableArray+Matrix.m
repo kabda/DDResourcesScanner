@@ -54,6 +54,36 @@
     return [fliteredArray copy];
 }
 
+- (NSArray *)objectsInCol:(NSUInteger)col {
+    NSArray *sourceArray = [self copy];
+    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
+    NSUInteger index = col;
+    NSUInteger capacity = sourceArray.count;
+    while (index < capacity) {
+        id object = sourceArray[index];
+        if (![object isKindOfClass:[NSNull class]]) {
+            [returnArray addObject:object];
+        }
+        index += self.length;
+    }
+    return [returnArray copy];
+}
+
+- (NSArray *)objectsInRow:(NSUInteger)row {
+    NSArray *sourceArray = [self copy];
+    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
+    NSUInteger index = row * self.length;
+    NSUInteger capacity = index + self.length;
+    while (index < capacity) {
+        id object = sourceArray[index];
+        if (![object isKindOfClass:[NSNull class]]) {
+            [returnArray addObject:object];
+        }
+        index += 1;
+    }
+    return [returnArray copy];
+}
+
 #pragma mark - Setter/Getter
 static const void *kLengthNameKey = &kLengthNameKey;
 

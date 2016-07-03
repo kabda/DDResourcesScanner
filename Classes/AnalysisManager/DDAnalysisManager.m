@@ -7,7 +7,6 @@
 //
 
 #import "DDAnalysisManager.h"
-#import "NSMutableArray+Matrix.h"
 
 @interface DDAnalysisManager ()
 @property (nonatomic, strong) NSArray *allImages;
@@ -97,10 +96,10 @@
 
         NSArray *sourceImages = [[NSArray alloc] initWithArray:self.allImages];
         NSUInteger length = sourceImages.count;
-        NSMutableArray *matrixArray = [NSMutableArray matrixArrayWithLength:length];
-        for (NSInteger section = 0; section < length; section++) {
+        NSMutableArray *similarImages = [NSMutableArray matrixArrayWithLength:length];
+        for (NSInteger section = 0; section < length - 1; section++) {
             DDImageModel *imageModel1 = (DDImageModel *)sourceImages[section];
-            for (NSInteger index = 0; index < length; index++) {
+            for (NSInteger index = section + 1; index < length - 1; index++) {
                 DDImageModel *imageModel2 = (DDImageModel *)sourceImages[index];
                 
                 NSInteger similarLevel = [imageModel1.image similarLevelWithAnotherImage:imageModel2.image];
@@ -109,9 +108,7 @@
                 similarImagesModel.imageModel1 = imageModel1;
                 similarImagesModel.imageModel2 = imageModel2;
                 similarImagesModel.similarLevel = similarLevel;
-                similarImagesModel.col = index;
-                similarImagesModel.row = section;
-                [matrixArray setObject:similarImagesModel forCol:index atRow:section];
+                [similarImages addObject:similarImagesModel];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath:progress:)]) {
@@ -121,20 +118,11 @@
             }
         }
         double reduplicateSize = 0.0;
-        NSArray *similarImages =[matrixArray fliterObjectsWithCondition:^BOOL(id theObject) {
-                                    if ([theObject isKindOfClass:[DDSimilarImagesModel class]]) {
-                                        DDSimilarImagesModel *similarImagesModel = (DDSimilarImagesModel *)theObject;
-                                        return (similarImagesModel.similarLevel < similarLevel);
-                                    }
-                                    return NO;
-                                }];
-
-        
-        
-        for (DDImageModel *imageModel in similarImages) {
-            reduplicateSize += imageModel.volume;
+        for (DDSimilarImagesModel *similarImagesModel in similarImages) {
+            reduplicateSize += similarImagesModel.imageModel1.volume;
+            reduplicateSize += similarImagesModel.imageModel2.volume;
         }
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
 
             self.similarImages = [similarImages copy];

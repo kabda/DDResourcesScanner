@@ -18,5 +18,7 @@
 - (id)objectForCol:(NSUInteger)col atRow:(NSInteger)row;
 - (void)resetObjectForCol:(NSInteger)col atRow:(NSInteger)row; //reset可以理解为一般意义上的remove，只是reset会用NSNull进行占位
 - (NSArray *)fliterObjectsWithCondition:(BOOL (^)(id theObject))condition;
+- (NSArray *)objectsInCol:(NSUInteger)col;
+- (NSArray *)objectsInRow:(NSUInteger)row;
 
 @end
