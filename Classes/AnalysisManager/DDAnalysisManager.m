@@ -96,7 +96,7 @@
 
         NSArray *sourceImages = [[NSArray alloc] initWithArray:self.allImages];
         NSUInteger length = sourceImages.count;
-        NSMutableArray *similarImages = [NSMutableArray matrixArrayWithLength:length];
+        NSMutableArray *similarImages = [[NSMutableArray alloc] init];
         for (NSInteger section = 0; section < length - 1; section++) {
             DDImageModel *imageModel1 = (DDImageModel *)sourceImages[section];
             for (NSInteger index = section + 1; index < length - 1; index++) {
