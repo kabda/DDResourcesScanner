@@ -118,14 +118,17 @@
             }
         }
         double reduplicateSize = 0.0;
+        NSMutableArray *returnImages = [[NSMutableArray alloc] init];
         for (DDSimilarImagesModel *similarImagesModel in similarImages) {
             reduplicateSize += similarImagesModel.imageModel1.volume;
             reduplicateSize += similarImagesModel.imageModel2.volume;
+            [returnImages addObject:similarImagesModel.imageModel1];
+            [returnImages addObject:similarImagesModel.imageModel2];
         }
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
 
-            self.similarImages = [similarImages copy];
+            self.similarImages = [returnImages copy];
             self.reduplicateSize = reduplicateSize;
 
             if (completion) {

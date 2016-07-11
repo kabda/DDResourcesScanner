@@ -10,9 +10,6 @@
 
 @interface DDImageModel : NSObject
 
-+ (instancetype)imageModelWithCol:(NSUInteger)col row:(NSUInteger)row;
-- (instancetype)initWithCol:(NSUInteger)col row:(NSUInteger)row;
-
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, assign) double volume;
 
