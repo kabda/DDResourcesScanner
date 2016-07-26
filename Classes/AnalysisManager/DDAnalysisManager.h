@@ -27,6 +27,6 @@
 
 
 - (void)loadAllImagesCompleted:(void(^)(BOOL succeed))completion;
-- (void)findSimilarImagesWithLevel:(NSInteger)similarLevel completed:(void(^)(BOOL succeed))completion;
+- (void)findSimilarImagesWithLevel:(NSInteger)limitedLevel completed:(void(^)(BOOL succeed))completion;
 
 @end

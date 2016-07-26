@@ -9,8 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "DDImageModel.h"
 
-@interface DDSimilarImagesModel : NSObject
-@property (nonatomic, strong) DDImageModel *imageModel1;
-@property (nonatomic, strong) DDImageModel *imageModel2;
+
+@interface DDSimilarImageModel : NSObject
+@property (nonatomic, strong) NSArray<DDImageModel *> *similarImages;
 @property (nonatomic, assign) NSInteger similarLevel;
+@end
+
+@interface DDSimilarImagesModel : NSObject
+@property (nonatomic, strong) DDImageModel *sourceImage;
+@property (nonatomic, strong) NSArray<DDSimilarImageModel *> *similarImages;
+@property (nonatomic, assign) long reduplicateSize;
 @end

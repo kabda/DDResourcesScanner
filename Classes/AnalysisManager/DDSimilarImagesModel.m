@@ -8,6 +8,11 @@
 
 #import "DDSimilarImagesModel.h"
 
+@implementation DDSimilarImageModel
+
+@end
+
+
 @implementation DDSimilarImagesModel
 
 @end

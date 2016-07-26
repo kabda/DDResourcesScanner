@@ -14,6 +14,7 @@
 
 @property (nonatomic, assign) long totalSize;
 @property (nonatomic, assign) long reduplicateSize;
+
 @end
 
 
@@ -89,7 +90,7 @@
     });
 }
 
-- (void)findSimilarImagesWithLevel:(NSInteger)similarLevel
+- (void)findSimilarImagesWithLevel:(NSInteger)limitedLevel
                          completed:(void(^)(BOOL succeed))completion {
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -97,38 +98,40 @@
         NSArray *sourceImages = [[NSArray alloc] initWithArray:self.allImages];
         NSUInteger length = sourceImages.count;
         NSMutableArray *similarImages = [[NSMutableArray alloc] init];
+        long reduplicateSize = 0.0;
+
         for (NSInteger section = 0; section < length - 1; section++) {
             DDImageModel *imageModel1 = (DDImageModel *)sourceImages[section];
+            DDSimilarImagesModel *similarImagesModel = [[DDSimilarImagesModel alloc] init];
+            similarImagesModel.sourceImage = imageModel1;
+
             for (NSInteger index = section + 1; index < length - 1; index++) {
                 DDImageModel *imageModel2 = (DDImageModel *)sourceImages[index];
                 
                 NSInteger similarLevel = [imageModel1.image similarLevelWithAnotherImage:imageModel2.image];
-                
-                DDSimilarImagesModel *similarImagesModel = [[DDSimilarImagesModel alloc] init];
-                similarImagesModel.imageModel1 = imageModel1;
-                similarImagesModel.imageModel2 = imageModel2;
-                similarImagesModel.similarLevel = similarLevel;
-                [similarImages addObject:similarImagesModel];
-                
+                if (similarLevel < limitedLevel) {
+                    NSArray *tmpArray = similarImagesModel.similarImages;
+                    NSMutableArray *tmpMutableArray = [[NSMutableArray alloc] initWithArray:tmpArray];
+                    [tmpMutableArray addObject:imageModel2];
+                    similarImagesModel.similarImages = [tmpMutableArray copy];
+                    similarImagesModel.reduplicateSize += imageModel2.volume;
+                }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath:progress:)]) {
                         [self.delegate analysisManager:self didHandleImageWithPath:imageModel2.path progress:((section * length + index) / (length * length))];
                     }
                 });
             }
-        }
-        double reduplicateSize = 0.0;
-        NSMutableArray *returnImages = [[NSMutableArray alloc] init];
-        for (DDSimilarImagesModel *similarImagesModel in similarImages) {
-            reduplicateSize += similarImagesModel.imageModel1.volume;
-            reduplicateSize += similarImagesModel.imageModel2.volume;
-            [returnImages addObject:similarImagesModel.imageModel1];
-            [returnImages addObject:similarImagesModel.imageModel2];
+
+            if (similarImagesModel.similarImages.count > 0) {
+                [similarImages addObject:similarImagesModel];
+                reduplicateSize += similarImagesModel.reduplicateSize;
+            }
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
 
-            self.similarImages = [returnImages copy];
+            self.similarImages = [similarImages copy];
             self.reduplicateSize = reduplicateSize;
 
             if (completion) {
