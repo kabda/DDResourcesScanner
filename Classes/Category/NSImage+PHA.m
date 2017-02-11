@@ -113,6 +113,9 @@
 }
 
 + (NSInteger)differentBetweenFingerprint:(NSString *)fingerprint1 andFingerprint:(NSString *)fingerprint2 {
+    if (fingerprint1.length == 0 || fingerprint1.length != fingerprint2.length) {
+        return NSIntegerMax;
+    }
     NSInteger diff = 0;
     const char * s1 = [fingerprint1 UTF8String];
     const char * s2 = [fingerprint2 UTF8String];

@@ -8,7 +8,6 @@
 
 #import "DDTree.h"
 
-
 @implementation DDNode
 
 + (instancetype)nodeForParent:(DDNode *)parent
@@ -16,7 +15,7 @@
 
     DDNode *node  = [[DDNode alloc] init];
     node.parent   = parent;
-    node.children = [[NSMutableSet alloc] init];
+    node.children = [[NSMutableArray alloc] init];
     node.object   = object;
     return node;
 }
@@ -38,6 +37,11 @@
     return tree;
 }
 
+- (void)empty {
+    self.rootNode = [DDNode nodeForParent:nil withObject:nil];
+}
+
+
 - (void)addChildForRoot:(DDNode *)child {
     if (!child || ![child isKindOfClass:[DDNode class]]) {
         //无效子节点
@@ -53,6 +57,10 @@
     }
     if (!parent || ![parent isKindOfClass:[DDNode class]]) {
         //无效父节点
+        return;
+    }
+    if ([parent.children containsObject:child]) {
+        //已经存在该子节点
         return;
     }
     child.parent = parent;
@@ -74,55 +82,22 @@
     }
     if (!parent || ![parent isKindOfClass:[DDNode class]]) {
         //无效父节点
-        //添加至root
-        [self addChild:child forParent:self.rootNode];
+        return;
     }
+    [self removeChildFromParent:child];
+    [self addChild:child forParent:parent];
 }
 
-- (NSArray *)childrenOfRoot {
-    return [self childrenOfNode:self.rootNode];
-}
-
-- (NSArray *)childrenOfNode:(DDNode *)node {
-    if (!node || ![node isKindOfClass:[DDNode class]]) {
-        //无效节点
-        return nil;
++ (void)traverse:(DDNode *)rootNode handler:(void(^)(DDNode *node))handler {
+    if (!rootNode) {
+        return;
     }
-    return node.children.allObjects;
-}
-
-- (NSArray *)allChildren {
-    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
-    NSMutableArray *queueArray = [[NSMutableArray alloc] init];
-    [queueArray addObject:self.rootNode]; //压入根节点
-    while (queueArray.count > 0) {
-        DDNode *node = queueArray.firstObject;
-        [queueArray removeObjectAtIndex:0]; //弹出最前面的节点，仿照队列先进先出原则
-        NSArray *children = [self childrenOfNode:node];
-        if (children.count > 0) {
-            [returnArray addObjectsFromArray:children];
-            [queueArray addObjectsFromArray:children];
-        }
+    if (handler) {
+        handler(rootNode);
     }
-    return [returnArray copy];
-}
-
-- (NSArray *)allLeaves {
-    NSMutableArray *returnArray = [[NSMutableArray alloc] init];
-    NSMutableArray *queueArray = [[NSMutableArray alloc] init];
-    [queueArray addObject:self.rootNode]; //压入根节点
-    while (queueArray.count > 0) {
-        DDNode *node = queueArray.firstObject;
-        [queueArray removeObjectAtIndex:0]; //弹出最前面的节点，仿照队列先进先出原则
-        NSArray *children = [self childrenOfNode:node];
-        if (children.count > 0) {
-            [queueArray addObjectsFromArray:children];
-        } else {
-            //叶节点返回
-            [returnArray addObject:node];
-        }
+    for (DDNode *childNode in rootNode.children.copy) {
+        [DDTree traverse:childNode handler:handler];
     }
-    return [returnArray copy];
 }
 
 @end

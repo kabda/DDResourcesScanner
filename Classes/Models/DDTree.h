@@ -10,9 +10,9 @@
 
 
 @interface DDNode : NSObject
-@property (nonatomic, weak  ) DDNode                 *parent;
-@property (nonatomic, strong) NSMutableSet<DDNode *> *children;
-@property (nonatomic, strong) NSObject               *object;
+@property (nonatomic, weak  ) DDNode                   *parent;
+@property (nonatomic, strong) NSMutableArray<DDNode *> *children;
+@property (nonatomic, strong) NSObject                 *object;
 
 + (instancetype)nodeForParent:(DDNode *)parent
                    withObject:(NSObject *)object;
@@ -22,20 +22,16 @@
 
 
 @interface DDTree : NSObject
+@property (nonatomic, strong, readonly) DDNode *rootNode;
 
 + (instancetype)tree;
 
-- (void)addChildForRoot:(DDNode *)child;
+- (void)empty;
 
 - (void)addChild:(DDNode *)child forParent:(DDNode *)parent;
 - (void)removeChildFromParent:(DDNode *)child;
-
 - (void)moveChild:(DDNode *)child toParent:(DDNode *)parent;
 
-- (NSArray *)childrenOfRoot;
-- (NSArray *)childrenOfNode:(DDNode *)node;
-
-- (NSArray *)allChildren;//所有子节点
-- (NSArray *)allLeaves;//所有叶节点(没有子节点的节点)
++ (void)traverse:(DDNode *)rootNode handler:(void(^)(DDNode *node))handler;
 
 @end
