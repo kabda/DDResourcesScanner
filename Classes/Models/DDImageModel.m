@@ -15,6 +15,7 @@
 @property (nonatomic, copy  ) NSString   *name;
 @property (nonatomic, assign) NSUInteger scale;
 @property (nonatomic, copy  ) NSString   *fingerprint;
+@property (nonatomic, strong) NSImage    *image;
 @end
 
 @implementation DDImageModel
@@ -25,7 +26,8 @@
     model.volume        = [DDImageModel imageSizeForPath:path];
     model.name          = [DDImageModel imageNameForPath:path];
     model.scale         = [DDImageModel imageScaleForPath:path];
-    model.fingerprint   = [DDImageModel fingerprintForPath:path];
+    model.image         = [DDImageModel imageForPath:path];
+    model.fingerprint   = model.image.fingerprint;
     return model;
 }
 
@@ -48,11 +50,6 @@
         return 2;
     }
     return 1;
-}
-
-+ (NSString *)fingerprintForPath:(NSString *)path {
-    NSImage *image = [DDImageModel imageForPath:path];
-    return image.fingerprint;
 }
 
 + (NSImage *)imageForPath:(NSString *)path {

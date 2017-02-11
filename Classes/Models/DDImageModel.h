@@ -15,6 +15,7 @@
 @property (nonatomic, copy,   readonly) NSString   *name;        //名称
 @property (nonatomic, assign, readonly) NSUInteger scale;        //缩放率
 @property (nonatomic, copy,   readonly) NSString   *fingerprint; //图片指纹
+@property (nonatomic, strong, readonly) NSImage    *image;       //图片
 
 + (instancetype)modelForPath:(NSString *)path;
 
