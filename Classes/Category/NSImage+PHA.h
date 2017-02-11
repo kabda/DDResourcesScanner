@@ -12,7 +12,8 @@
 
 @interface NSImage (PHA)
 
-+ (NSInteger)similarLevelForImage:(NSImage *)image1 andAnotherImage:(NSImage *)image2;
-- (NSInteger)similarLevelWithAnotherImage:(NSImage *)image;
+- (NSString *)fingerprint;
+
++ (NSInteger)differentBetweenFingerprint:(NSString *)fingerprint1 andFingerprint:(NSString *)fingerprint2;
 
 @end

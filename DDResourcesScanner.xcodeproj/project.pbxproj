@@ -7,26 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8F10BFDB1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F10BFDA1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib */; };
-		8F10BFDD1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F10BFDC1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib */; };
-		8F10BFDF1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F10BFDE1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib */; };
-		8F838C061D27F91B00E5AA3D /* DDSimilarImagesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F838C051D27F91B00E5AA3D /* DDSimilarImagesModel.m */; };
+		9002E83E1E4F3F0A004475D1 /* DDTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 9002E83D1E4F3F0A004475D1 /* DDTree.m */; };
+		9002E8411E4F4A7E004475D1 /* DDImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9002E8401E4F4A7E004475D1 /* DDImageModel.m */; };
 		90C8DD121D24F94300FEC4A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD111D24F94300FEC4A0 /* AppDelegate.m */; };
 		90C8DD151D24F94300FEC4A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD141D24F94300FEC4A0 /* main.m */; };
 		90C8DD181D24F94300FEC4A0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD171D24F94300FEC4A0 /* ViewController.m */; };
 		90C8DD1A1D24F94300FEC4A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90C8DD191D24F94300FEC4A0 /* Assets.xcassets */; };
 		90C8DD1D1D24F94300FEC4A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90C8DD1B1D24F94300FEC4A0 /* Main.storyboard */; };
-		90C8DD331D24F95A00FEC4A0 /* DDAnalysisManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD271D24F95A00FEC4A0 /* DDAnalysisManager.m */; };
-		90C8DD351D24F95A00FEC4A0 /* NSImage+PHA.mm in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD2C1D24F95A00FEC4A0 /* NSImage+PHA.mm */; };
-		90C8DD3A1D2503BA00FEC4A0 /* DDImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD391D2503BA00FEC4A0 /* DDImageModel.m */; };
+		90C8DD351D24F95A00FEC4A0 /* NSImage+PHA.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD2C1D24F95A00FEC4A0 /* NSImage+PHA.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8F10BFDA1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.13.dylib; path = ../../../../usr/local/lib/libopencv_core.2.4.13.dylib; sourceTree = "<group>"; };
-		8F10BFDC1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.2.4.13.dylib; path = ../../../../usr/local/lib/libopencv_highgui.2.4.13.dylib; sourceTree = "<group>"; };
-		8F10BFDE1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.2.4.13.dylib; path = ../../../../usr/local/lib/libopencv_imgproc.2.4.13.dylib; sourceTree = "<group>"; };
-		8F838C041D27F91B00E5AA3D /* DDSimilarImagesModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSimilarImagesModel.h; sourceTree = "<group>"; };
-		8F838C051D27F91B00E5AA3D /* DDSimilarImagesModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSimilarImagesModel.m; sourceTree = "<group>"; };
+		9002E83C1E4F3F0A004475D1 /* DDTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTree.h; sourceTree = "<group>"; };
+		9002E83D1E4F3F0A004475D1 /* DDTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTree.m; sourceTree = "<group>"; };
+		9002E83F1E4F4A7E004475D1 /* DDImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDImageModel.h; sourceTree = "<group>"; };
+		9002E8401E4F4A7E004475D1 /* DDImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDImageModel.m; sourceTree = "<group>"; };
 		90C8DD0D1D24F94300FEC4A0 /* DDResourcesScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DDResourcesScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90C8DD101D24F94300FEC4A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		90C8DD111D24F94300FEC4A0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -36,12 +31,8 @@
 		90C8DD191D24F94300FEC4A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		90C8DD1C1D24F94300FEC4A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		90C8DD1E1D24F94300FEC4A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		90C8DD261D24F95A00FEC4A0 /* DDAnalysisManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAnalysisManager.h; sourceTree = "<group>"; };
-		90C8DD271D24F95A00FEC4A0 /* DDAnalysisManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAnalysisManager.m; sourceTree = "<group>"; };
 		90C8DD2B1D24F95A00FEC4A0 /* NSImage+PHA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+PHA.h"; sourceTree = "<group>"; };
-		90C8DD2C1D24F95A00FEC4A0 /* NSImage+PHA.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSImage+PHA.mm"; sourceTree = "<group>"; };
-		90C8DD381D2503BA00FEC4A0 /* DDImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDImageModel.h; sourceTree = "<group>"; };
-		90C8DD391D2503BA00FEC4A0 /* DDImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDImageModel.m; sourceTree = "<group>"; };
+		90C8DD2C1D24F95A00FEC4A0 /* NSImage+PHA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+PHA.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,21 +40,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F10BFDF1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib in Frameworks */,
-				8F10BFDD1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib in Frameworks */,
-				8F10BFDB1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9002E8381E4F3BCD004475D1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9002E83C1E4F3F0A004475D1 /* DDTree.h */,
+				9002E83D1E4F3F0A004475D1 /* DDTree.m */,
+				9002E83F1E4F4A7E004475D1 /* DDImageModel.h */,
+				9002E8401E4F4A7E004475D1 /* DDImageModel.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		90C8DD041D24F94300FEC4A0 = {
 			isa = PBXGroup;
 			children = (
-				8F10BFDE1D27D3BE0014DC47 /* libopencv_imgproc.2.4.13.dylib */,
-				8F10BFDC1D27D3A50014DC47 /* libopencv_highgui.2.4.13.dylib */,
-				8F10BFDA1D27D38E0014DC47 /* libopencv_core.2.4.13.dylib */,
 				90C8DD241D24F95A00FEC4A0 /* Classes */,
 				90C8DD0F1D24F94300FEC4A0 /* DDResourcesScanner */,
 				90C8DD0E1D24F94300FEC4A0 /* Products */,
@@ -104,30 +100,17 @@
 		90C8DD241D24F95A00FEC4A0 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				90C8DD251D24F95A00FEC4A0 /* AnalysisManager */,
+				9002E8381E4F3BCD004475D1 /* Models */,
 				90C8DD2A1D24F95A00FEC4A0 /* Category */,
 			);
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		90C8DD251D24F95A00FEC4A0 /* AnalysisManager */ = {
-			isa = PBXGroup;
-			children = (
-				90C8DD261D24F95A00FEC4A0 /* DDAnalysisManager.h */,
-				90C8DD271D24F95A00FEC4A0 /* DDAnalysisManager.m */,
-				90C8DD381D2503BA00FEC4A0 /* DDImageModel.h */,
-				90C8DD391D2503BA00FEC4A0 /* DDImageModel.m */,
-				8F838C041D27F91B00E5AA3D /* DDSimilarImagesModel.h */,
-				8F838C051D27F91B00E5AA3D /* DDSimilarImagesModel.m */,
-			);
-			path = AnalysisManager;
 			sourceTree = "<group>";
 		};
 		90C8DD2A1D24F95A00FEC4A0 /* Category */ = {
 			isa = PBXGroup;
 			children = (
 				90C8DD2B1D24F95A00FEC4A0 /* NSImage+PHA.h */,
-				90C8DD2C1D24F95A00FEC4A0 /* NSImage+PHA.mm */,
+				90C8DD2C1D24F95A00FEC4A0 /* NSImage+PHA.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -202,11 +185,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				90C8DD181D24F94300FEC4A0 /* ViewController.m in Sources */,
-				8F838C061D27F91B00E5AA3D /* DDSimilarImagesModel.m in Sources */,
-				90C8DD331D24F95A00FEC4A0 /* DDAnalysisManager.m in Sources */,
+				9002E83E1E4F3F0A004475D1 /* DDTree.m in Sources */,
 				90C8DD151D24F94300FEC4A0 /* main.m in Sources */,
-				90C8DD351D24F95A00FEC4A0 /* NSImage+PHA.mm in Sources */,
-				90C8DD3A1D2503BA00FEC4A0 /* DDImageModel.m in Sources */,
+				90C8DD351D24F95A00FEC4A0 /* NSImage+PHA.m in Sources */,
+				9002E8411E4F4A7E004475D1 /* DDImageModel.m in Sources */,
 				90C8DD121D24F94300FEC4A0 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

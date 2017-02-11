@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "DDAnalysisManager.h"
 
 typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     DDScannerWorkFlowWaitingSelectPath,
