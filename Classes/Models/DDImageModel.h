@@ -11,7 +11,7 @@
 @interface DDImageModel : NSObject
 
 @property (nonatomic, copy,   readonly) NSString   *path;        //路径
-@property (nonatomic, strong, readonly) NSNumber   *volume;       //容量
+@property (nonatomic, assign, readonly) long       volume;       //容量
 @property (nonatomic, copy,   readonly) NSString   *name;        //名称
 @property (nonatomic, assign, readonly) NSUInteger scale;        //缩放率
 @property (nonatomic, copy,   readonly) NSString   *fingerprint; //图片指纹

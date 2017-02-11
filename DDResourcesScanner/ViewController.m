@@ -100,8 +100,8 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     self.contentLabel.stringValue = [NSString stringWithFormat:@"[正在扫描图片] %@", path];
 }
 
-- (void)analysisManager:(DDAnalysisManager *)manager didHandleImageWithPath:(NSString *)path progress:(double)progress {
-    self.contentLabel.stringValue = [NSString stringWithFormat:@"[%0.2f%%] %@", progress * 100, path];
+- (void)analysisManager:(DDAnalysisManager *)manager didHandleImageWithPath:(NSString *)path {
+    self.contentLabel.stringValue = [NSString stringWithFormat:@"[正在寻找相似图片] %@", path];
 }
 
 #pragma mark - Open Finder
@@ -130,12 +130,13 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     [self.analysisManager loadAllImagesCompleted:^(BOOL succeed) {
         if (succeed) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
-            [strongSelf.analysisManager findSimilarImagesWithLevel:self.similarity completed:^(BOOL succeed) {
+            [strongSelf.analysisManager findSimilarImagesWithLevel:self.similarity
+                                                         completed:^(BOOL succeed) {
 
                 __strong __typeof(weakSelf) strongSelf = weakSelf;
                 if (succeed) {
                     strongSelf.actionButton.enabled = YES;
-//                    strongSelf.contentLabel.stringValue = [NSString stringWithFormat:@"总计: %ldKB, 相似: %ldKB", strongSelf.analysisManager.totalSize, strongSelf.analysisManager.reduplicateSize];
+                    strongSelf.contentLabel.stringValue = [NSString stringWithFormat:@"总计: %lldKB, 相似: %lldKB", strongSelf.analysisManager.total / 1024, strongSelf.analysisManager.similarity / 1024];
                     strongSelf.workFlow = DDScannerWorkFlowCompleted;
                     [strongSelf.resourcesTableView reloadData];
                 }

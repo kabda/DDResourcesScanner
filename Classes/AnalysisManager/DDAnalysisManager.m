@@ -12,6 +12,8 @@
 
 @interface DDAnalysisManager ()
 @property (nonatomic, strong) DDTree *tree;
+@property (nonatomic, assign) long long total;
+@property (nonatomic, assign) long long similarity;
 @end
 
 
@@ -32,6 +34,7 @@
                 NSString *fullPath = [self.projectPath stringByAppendingPathComponent:path];
 
                 DDImageModel *imageModel = [DDImageModel modelForPath:fullPath];
+                self.total += imageModel.volume;
                 DDNode *node = [DDNode nodeForParent:nil withObject:imageModel];
                 [self.tree addChild:node forParent:self.tree.rootNode];
 
@@ -72,22 +75,23 @@
                 }
                 if (tmpNode) {
                     DDImageModel *imageModel1 = (DDImageModel *)tmpNode.object;
+
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath:)]) {
+                            [self.delegate analysisManager:self didHandleImageWithPath:imageModel1.path];
+                        }
+                    });
+
                     DDImageModel *imageModel2 = (DDImageModel *)node.object;
                     NSInteger diff = [NSImage differentBetweenFingerprint:imageModel1.fingerprint andFingerprint:imageModel2.fingerprint];
                     if (diff <= limitedLevel) {
                         [self.tree moveChild:node toParent:tmpNode];
-
+                        self.similarity += imageModel2.volume;
                         unfinished = YES;
                     }
                 }
             }];
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath:progress:)]) {
-                        [self.delegate analysisManager:self didHandleImageWithPath:nil progress:0.0];
-                    }
-                });
 
         dispatch_async(dispatch_get_main_queue(), ^{
 

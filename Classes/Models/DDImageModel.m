@@ -11,7 +11,7 @@
 
 @interface DDImageModel ()
 @property (nonatomic, copy  ) NSString   *path;
-@property (nonatomic, strong) NSNumber   *volume;
+@property (nonatomic, assign) long       volume;
 @property (nonatomic, copy  ) NSString   *name;
 @property (nonatomic, assign) NSUInteger scale;
 @property (nonatomic, copy  ) NSString   *fingerprint;
@@ -29,10 +29,11 @@
     return model;
 }
 
-+ (NSNumber *)imageSizeForPath:(NSString *)path {
++ (long)imageSizeForPath:(NSString *)path {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSDictionary *attributes = [fileManager attributesOfItemAtPath:path error:nil];
-    return [attributes objectForKey:NSFileSize];
+    NSNumber *size = [attributes objectForKey:NSFileSize];
+    return size.longValue;
 }
 
 + (NSString *)imageNameForPath:(NSString *)path {
