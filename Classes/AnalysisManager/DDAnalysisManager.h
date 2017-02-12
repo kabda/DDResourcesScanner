@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DDTree.h"
+#import "DDStructure.h"
+#import "DDImageModel.h"
 
 @class DDAnalysisManager;
 @protocol DDAnalysisManagerDelegate <NSObject>
 - (void)analysisManager:(DDAnalysisManager *)manager didScanningImageWithPath:(NSString *)path;
-- (void)analysisManager:(DDAnalysisManager *)manager didHandleImageWithPath:(NSString *)path;
+- (void)analysisManager:(DDAnalysisManager *)manager didHandleImageWithPath1:(NSString *)path1 path2:(NSString *)path2;
 @end
 
 @interface DDAnalysisManager : NSObject
-@property (nonatomic, strong, readonly) DDTree *tree;
-
+@property (nonatomic, strong, readonly) DDTree    *tree;
 @property (nonatomic, assign, readonly) long long total;
 @property (nonatomic, assign, readonly) long long similarity;
 

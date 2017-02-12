@@ -17,10 +17,10 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     DDScannerWorkFlowCompleted,
 };
 
-@interface ViewController () <NSTableViewDelegate, NSTableViewDataSource, DDAnalysisManagerDelegate>
+@interface ViewController () <NSOutlineViewDelegate, NSOutlineViewDataSource, DDAnalysisManagerDelegate>
 @property (weak) IBOutlet NSButton *actionButton;
 @property (weak) IBOutlet NSTextField *contentLabel;
-@property (weak) IBOutlet NSTableView *resourcesTableView;
+@property (weak) IBOutlet NSOutlineView *resourcesView;
 
 @property (nonatomic, assign) NSUInteger similarity;//相似度
 
@@ -37,8 +37,8 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     self.workFlow = DDScannerWorkFlowWaitingSelectPath;
     self.contentLabel.stringValue = @"";
 
-    self.resourcesTableView.dataSource = self;
-    self.resourcesTableView.delegate = self;
+//    self.resourcesView.dataSource = self;
+//    self.resourcesView.delegate = self;
 
     self.analysisManager.delegate = self;
 }
@@ -63,36 +63,75 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     }
 }
 
-#pragma mark - NSTableViewDataSource
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-//    return self.analysisManager.similarImages.count;
-    return 0;
+#pragma mark - NSOutlineViewDataSource
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
+    if ([item isKindOfClass:[DDNode class]]) {
+        return ((DDNode *)item).children.count;
+    }
+    return 1;
 }
 
-#pragma mark - NSTableViewDelegate
-- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
-    return 80.0;
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
+    if ([item isKindOfClass:[DDNode class]]) {
+        return ((DDNode *)item).children[index];
+    }
+    return self.analysisManager.tree.rootNode;
 }
 
-- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 
-//    DDImageModel *imageModel = self.analysisManager.similarImages[row];
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
+    if ([item isKindOfClass:[DDNode class]]) {
+        return (((DDNode *)item).children > 0);
+    }
+    return NO;
+}
 
-    NSTableCellView *cell = [tableView makeViewWithIdentifier:tableColumn.identifier owner:nil];
-//    if ([tableColumn.identifier isEqualToString:@"kImageAndNameIdentifier"]) {
-//        cell.textField.stringValue = imageModel.name;
-//        cell.imageView.image = imageModel.image;
-//    } else if ([tableColumn.identifier isEqualToString:@"kPathIdentifier"]) {
-//        cell.textField.stringValue = imageModel.path;
-//        cell.imageView.image = nil;
-//    } else if ([tableColumn.identifier isEqualToString:@"kSizeIdentifier"]) {
-//        cell.textField.stringValue = [NSString stringWithFormat:@"%0.2f", imageModel.volume];
-//        cell.imageView.image = nil;
-//    } else {
-//        cell.textField.stringValue = @"";
-//        cell.imageView.image = nil;
-//    }
-    return cell;
+#pragma mark - NSOutlineViewDelegate
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+    return 40.0;
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView
+    willDisplayCell:(id)cell
+     forTableColumn:(NSTableColumn *)tableColumn
+               item:(id)item {
+
+    NSString *identifier = tableColumn.identifier;
+    if ([item isKindOfClass:[DDNode class]]) {
+        DDNode *node = (DDNode *)item;
+        if (node.object) {
+            DDImageModel *imageModel = (DDImageModel *)node.object;
+            if ([identifier isEqualToString:@"kImageIdentifier"]) {
+                NSImageCell *imageCell = (NSImageCell*)cell;
+                imageCell.image = imageModel.image;
+            }
+            if ([identifier isEqualToString:@"kNameIdentifier"]) {
+                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+                textFieldCell.stringValue = imageModel.name;
+            }
+            if ([identifier isEqualToString:@"kPathIdentifier"]) {
+                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+                textFieldCell.stringValue = imageModel.path;
+            }
+            if ([identifier isEqualToString:@"kSizeIdentifier"]) {
+                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+                textFieldCell.stringValue = [NSString stringWithFormat:@"%0.2f", imageModel.volume / 1024.0];
+            }
+        }
+    } else {
+        if ([identifier isEqualToString:@"kNameIdentifier"]) {
+            NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+            textFieldCell.stringValue = @"根目录";
+        }
+    }
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item {
+    return [outlineView isExpandable:item];
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item {
+    return (!!item);
 }
 
 #pragma mark - DDAnalysisManagerDelegate
@@ -100,8 +139,8 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     self.contentLabel.stringValue = [NSString stringWithFormat:@"[正在扫描图片] %@", path];
 }
 
-- (void)analysisManager:(DDAnalysisManager *)manager didHandleImageWithPath:(NSString *)path {
-    self.contentLabel.stringValue = [NSString stringWithFormat:@"[正在寻找相似图片] %@", path];
+- (void)analysisManager:(DDAnalysisManager *)manager didHandleImageWithPath1:(NSString *)path1 path2:(NSString *)path2 {
+    self.contentLabel.stringValue = [NSString stringWithFormat:@"[正在寻找相似图片] %@", path1];
 }
 
 #pragma mark - Open Finder
@@ -138,7 +177,7 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
                     strongSelf.actionButton.enabled = YES;
                     strongSelf.contentLabel.stringValue = [NSString stringWithFormat:@"总计: %lldKB, 相似: %lldKB", strongSelf.analysisManager.total / 1024, strongSelf.analysisManager.similarity / 1024];
                     strongSelf.workFlow = DDScannerWorkFlowCompleted;
-                    [strongSelf.resourcesTableView reloadData];
+                    [strongSelf.resourcesView reloadData];
                 }
             }];
         }

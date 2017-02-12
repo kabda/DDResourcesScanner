@@ -7,11 +7,10 @@
 //
 
 #import "DDAnalysisManager.h"
-#import "DDImageModel.h"
 #import "NSImage+PHA.h"
 
 @interface DDAnalysisManager ()
-@property (nonatomic, strong) DDTree *tree;
+@property (nonatomic, strong) DDTree    *tree;
 @property (nonatomic, assign) long long total;
 @property (nonatomic, assign) long long similarity;
 @end
@@ -22,7 +21,12 @@
 
 - (void)loadAllImagesCompleted:(void(^)(BOOL succeed))completion {
 
+    self.total = 0;
+    self.similarity = 0;
+    
     [self.tree empty];
+    DDNode *virtualRoot = [DDNode nodeForParent:nil withObject:nil];
+    [self.tree addChild:virtualRoot forParent:nil];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
@@ -34,9 +38,10 @@
                 NSString *fullPath = [self.projectPath stringByAppendingPathComponent:path];
 
                 DDImageModel *imageModel = [DDImageModel modelForPath:fullPath];
-                self.total += imageModel.volume;
                 DDNode *node = [DDNode nodeForParent:nil withObject:imageModel];
                 [self.tree addChild:node forParent:self.tree.rootNode];
+
+                self.total += imageModel.volume;
 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if ([self.delegate respondsToSelector:@selector(analysisManager:didScanningImageWithPath:)]) {
@@ -74,15 +79,16 @@
                     return;
                 }
                 if (tmpNode) {
+
                     DDImageModel *imageModel1 = (DDImageModel *)tmpNode.object;
+                    DDImageModel *imageModel2 = (DDImageModel *)node.object;
 
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath:)]) {
-                            [self.delegate analysisManager:self didHandleImageWithPath:imageModel1.path];
+                        if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath1:path2:)]) {
+                            [self.delegate analysisManager:self didHandleImageWithPath1:imageModel1.path path2:imageModel2.path];
                         }
                     });
 
-                    DDImageModel *imageModel2 = (DDImageModel *)node.object;
                     NSInteger diff = [NSImage differentBetweenFingerprint:imageModel1.fingerprint andFingerprint:imageModel2.fingerprint];
                     if (diff <= limitedLevel) {
                         [self.tree moveChild:node toParent:tmpNode];
@@ -92,7 +98,6 @@
                 }
             }];
         }
-
         dispatch_async(dispatch_get_main_queue(), ^{
 
             if (completion) {

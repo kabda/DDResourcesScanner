@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9002E83E1E4F3F0A004475D1 /* DDTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 9002E83D1E4F3F0A004475D1 /* DDTree.m */; };
 		9002E8411E4F4A7E004475D1 /* DDImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9002E8401E4F4A7E004475D1 /* DDImageModel.m */; };
 		9002E8451E4F6960004475D1 /* DDAnalysisManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9002E8441E4F6960004475D1 /* DDAnalysisManager.m */; };
+		90AC93DE1E4FFB9B005C5250 /* DDStructure.m in Sources */ = {isa = PBXBuildFile; fileRef = 90AC93DD1E4FFB9B005C5250 /* DDStructure.m */; };
 		90C8DD121D24F94300FEC4A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD111D24F94300FEC4A0 /* AppDelegate.m */; };
 		90C8DD151D24F94300FEC4A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD141D24F94300FEC4A0 /* main.m */; };
 		90C8DD181D24F94300FEC4A0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90C8DD171D24F94300FEC4A0 /* ViewController.m */; };
@@ -19,12 +19,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9002E83C1E4F3F0A004475D1 /* DDTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTree.h; sourceTree = "<group>"; };
-		9002E83D1E4F3F0A004475D1 /* DDTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTree.m; sourceTree = "<group>"; };
 		9002E83F1E4F4A7E004475D1 /* DDImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDImageModel.h; sourceTree = "<group>"; };
 		9002E8401E4F4A7E004475D1 /* DDImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDImageModel.m; sourceTree = "<group>"; };
 		9002E8431E4F6960004475D1 /* DDAnalysisManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAnalysisManager.h; sourceTree = "<group>"; };
 		9002E8441E4F6960004475D1 /* DDAnalysisManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAnalysisManager.m; sourceTree = "<group>"; };
+		90AC93DC1E4FFB9B005C5250 /* DDStructure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDStructure.h; sourceTree = "<group>"; };
+		90AC93DD1E4FFB9B005C5250 /* DDStructure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDStructure.m; sourceTree = "<group>"; };
 		90C8DD0D1D24F94300FEC4A0 /* DDResourcesScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DDResourcesScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90C8DD101D24F94300FEC4A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		90C8DD111D24F94300FEC4A0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -52,8 +52,8 @@
 		9002E8381E4F3BCD004475D1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9002E83C1E4F3F0A004475D1 /* DDTree.h */,
-				9002E83D1E4F3F0A004475D1 /* DDTree.m */,
+				90AC93DC1E4FFB9B005C5250 /* DDStructure.h */,
+				90AC93DD1E4FFB9B005C5250 /* DDStructure.m */,
 				9002E83F1E4F4A7E004475D1 /* DDImageModel.h */,
 				9002E8401E4F4A7E004475D1 /* DDImageModel.m */,
 			);
@@ -154,7 +154,7 @@
 		90C8DD051D24F94300FEC4A0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "樊远东";
 				TargetAttributes = {
 					90C8DD0C1D24F94300FEC4A0 = {
@@ -198,7 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				90C8DD181D24F94300FEC4A0 /* ViewController.m in Sources */,
-				9002E83E1E4F3F0A004475D1 /* DDTree.m in Sources */,
+				90AC93DE1E4FFB9B005C5250 /* DDStructure.m in Sources */,
 				90C8DD151D24F94300FEC4A0 /* main.m in Sources */,
 				90C8DD351D24F95A00FEC4A0 /* NSImage+PHA.m in Sources */,
 				9002E8411E4F4A7E004475D1 /* DDImageModel.m in Sources */,
@@ -235,8 +235,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -279,8 +281,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
