@@ -62,7 +62,8 @@
     });
 }
 
-- (void)findSimilarImagesWithLevel:(NSInteger)limitedLevel
+- (void)findSimilarImagesWithShapeLevel:(NSInteger)shapeLevel
+                             colorLevel:(CGFloat)colorLevel
                          completed:(void(^)(BOOL succeed))completion {
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -70,19 +71,29 @@
         NSMutableArray *storeArray = [[NSMutableArray alloc] init];
         NSArray *tmpArray = [[NSArray alloc] initWithArray:self.images];
         NSUInteger total = tmpArray.count;
-        for (NSInteger section = 0; section < total; total++) {
+        for (NSInteger section = 0; section < total; section++) {
             DDImageModel *image1 = (DDImageModel *)tmpArray[section];
             NSMutableArray *subStoreArray = [[NSMutableArray alloc] init];
             [subStoreArray addObject:image1];
             for (NSInteger index = (section + 1); index < total; index++) {
-                DDImageModel *image2 = (DDImageModel *)tmpArray[section];
-                NSInteger diff = [NSImage differentBetweenFingerprint:image1.fingerprint andFingerprint:image2.fingerprint];
-                if (diff <= limitedLevel) {
+                DDImageModel *image2 = (DDImageModel *)tmpArray[index];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if ([self.delegate respondsToSelector:@selector(analysisManager:didHandleImageWithPath1:path2:)]) {
+                        [self.delegate analysisManager:self didHandleImageWithPath1:image1.path path2:image2.path];
+                    }
+                });
+
+                NSInteger shapeDiff = [NSImage differentBetweenFingerprint:image1.fingerprint andFingerprint:image2.fingerprint];
+                CGFloat   colorDiff = [NSImage differentBetweenColor:image1.mainColor andColor:image2.mainColor];
+                if (shapeDiff <= shapeLevel && colorDiff <= colorLevel) {
                     [subStoreArray addObject:image2];
                 }
             }
             [storeArray addObject:subStoreArray];
         }
+        self.images = storeArray;
+        
 //        __block BOOL unfinished = YES;
 //        while (unfinished) {
 //            __block DDNode *tmpNode = nil;

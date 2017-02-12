@@ -7,7 +7,7 @@
 //
 
 #import "NSImage+PHA.h"
-
+#import <math.h>
 
 @implementation NSImage (PHA)
 
@@ -15,6 +15,10 @@
     NSImage *scaledImage = [NSImage scaleImage:self withSize:NSMakeSize(8.0, 8.0)];
     NSImage *grayImage   = [scaledImage pha_grayImage];
     return [grayImage pha_pHashStringValue];
+}
+
+- (NSColor *)mainColor {
+    return [self pha_mainColor];
 }
 
 + (NSImage *)scaleImage:(NSImage *)sourceImage withSize:(NSSize)newSize {
@@ -112,6 +116,58 @@
     return pHashString;
 }
 
+- (NSColor *)pha_mainColor {
+
+    CGContextRef bitmapCtx = CGBitmapContextCreate(NULL/*data - pass NULL to let CG allocate the memory*/,
+                                                   [self size].width,
+                                                   [self size].height,
+                                                   8 /*bitsPerComponent*/,
+                                                   0 /*bytesPerRow - CG will calculate it for you if it's allocating the data.  This might get padded out a bit for better alignment*/,
+                                                   [[NSColorSpace genericRGBColorSpace] CGColorSpace],
+                                                   kCGBitmapByteOrder32Host|kCGImageAlphaPremultipliedFirst);
+
+    unsigned char *data = CGBitmapContextGetData(bitmapCtx);
+
+    if (data == NULL) {
+        return nil;
+    }
+
+    NSCountedSet *cls = [NSCountedSet setWithCapacity:self.size.width * self.size.height];
+    for (int x = 0; x < self.size.width; x++) {
+        for (int y = 0; y < self.size.height; y++) {
+
+            int offset = 4*(x*y);
+
+            int red = data[offset];
+            int green = data[offset+1];
+            int blue = data[offset+2];
+            int alpha =  data[offset+3];
+
+            NSArray *clr=@[@(red),@(green),@(blue),@(alpha)];
+            [cls addObject:clr];
+        }
+    }
+    CGContextRelease(bitmapCtx);
+
+    NSEnumerator *enumerator = [cls objectEnumerator];
+    NSArray *curColor = nil;
+    NSArray *maxColor = nil;
+    NSUInteger maxCount = 0;
+    while ((curColor = [enumerator nextObject])) {
+        NSUInteger tmpCount = [cls countForObject:curColor];
+        if (tmpCount < maxCount) {
+            continue;
+        }
+        maxCount = tmpCount;
+        maxColor = curColor;
+    }
+    return [NSColor colorWithRed:([maxColor[0] intValue] / 255.0f)
+                           green:([maxColor[1] intValue] / 255.0f)
+                            blue:([maxColor[2] intValue] / 255.0f)
+                           alpha:([maxColor[3] intValue] / 255.0f)];
+}
+
+
 + (NSInteger)differentBetweenFingerprint:(NSString *)fingerprint1 andFingerprint:(NSString *)fingerprint2 {
     if (fingerprint1.length == 0 || fingerprint1.length != fingerprint2.length) {
         return NSIntegerMax;
@@ -126,5 +182,22 @@
     }
     return diff;
 }
+
++ (CGFloat)differentBetweenColor:(NSColor *)color1 andColor:(NSColor *)color2 {
+
+    CGFloat redColor1 = 0.0, redColor2 = 0.0;
+    CGFloat greenColor1 = 0.0, greenColor2 = 0.0;
+    CGFloat blueColor1 = 0.0, blueColor2 = 0.0;
+
+    [color1 getRed:&redColor1 green:&greenColor1 blue:&blueColor1 alpha:nil];
+    [color2 getRed:&redColor2 green:&greenColor2 blue:&blueColor2 alpha:nil];
+
+    CGFloat absR = fabs(redColor1 - redColor2);
+    CGFloat absG = fabs(greenColor1 - greenColor2);
+    CGFloat absB = fabs(blueColor1 - blueColor2);
+
+    return sqrt(absR * absR + absG * absG + absB * absB);
+}
+
 
 @end

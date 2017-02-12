@@ -30,7 +30,8 @@
 
 - (void)loadAllImagesCompleted:(void(^)(BOOL succeed))completion;
 
-- (void)findSimilarImagesWithLevel:(NSInteger)limitedLevel
-                         completed:(void(^)(BOOL succeed))completion;
+- (void)findSimilarImagesWithShapeLevel:(NSInteger)shapeLevel
+                             colorLevel:(CGFloat)colorLevel
+                              completed:(void(^)(BOOL succeed))completion;
 
 @end

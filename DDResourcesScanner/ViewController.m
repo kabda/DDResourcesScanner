@@ -9,7 +9,8 @@
 #import "ViewController.h"
 #import "DDAnalysisManager.h"
 
-static NSUInteger const kDefaultSimilarityValue = 5;
+static NSUInteger const kDefaultShapeSimilarityValue = 5;
+static NSUInteger const kDefaultColorSimilarityValue = 0.2;
 
 typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     DDScannerWorkFlowWaitingSelectPath,
@@ -22,7 +23,8 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
 @property (weak) IBOutlet NSTextField *contentLabel;
 @property (weak) IBOutlet NSOutlineView *resourcesView;
 
-@property (nonatomic, assign) NSUInteger similarity;//相似度
+@property (nonatomic, assign) NSUInteger shapeSimilarity;//相似度
+@property (nonatomic, assign) CGFloat colorSimilarity;//相似度
 
 @property (nonatomic, strong) DDAnalysisManager *analysisManager;
 @property (nonatomic, assign) DDScannerWorkFlow workFlow;
@@ -33,7 +35,9 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.similarity = kDefaultSimilarityValue;
+    self.shapeSimilarity = kDefaultShapeSimilarityValue;
+    self.colorSimilarity = kDefaultColorSimilarityValue;
+
     self.workFlow = DDScannerWorkFlowWaitingSelectPath;
     self.contentLabel.stringValue = @"";
 
@@ -70,17 +74,17 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
 //    }
 //    return self.analysisManager.tree.rootNode.children.count;
     if (!item) {
-        return 1;
+        return self.analysisManager.images.count;
     }
     if ([item isKindOfClass:[NSArray class]]) {
-        return ((NSArray *)item).count;
+        return ((NSArray *)item).count - 1;
     }
     return 0;
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
     if ([item isKindOfClass:[NSArray class]]) {
-        return (NSArray *)item[index];
+        return (NSArray *)item[index + 1];
     }
     return self.analysisManager.images[index];
 //    if ([item isKindOfClass:[DDNode class]]) {
@@ -92,7 +96,7 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
     if ([item isKindOfClass:[NSArray class]]) {
-        return ((NSArray *)item).count > 0;
+        return ((NSArray *)item).count - 1 > 0;
     }
     return NO;;
 
@@ -115,6 +119,27 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     NSString *identifier = tableColumn.identifier;
     if ([item isKindOfClass:[DDImageModel class]]) {
         DDImageModel *imageModel = (DDImageModel *)item;
+        if (imageModel) {
+            if ([identifier isEqualToString:@"kImageIdentifier"]) {
+                NSImageCell *imageCell = (NSImageCell*)cell;
+                imageCell.image = imageModel.image;
+            }
+            if ([identifier isEqualToString:@"kNameIdentifier"]) {
+                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+                textFieldCell.stringValue = imageModel.name;
+            }
+            if ([identifier isEqualToString:@"kPathIdentifier"]) {
+                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+                textFieldCell.stringValue = imageModel.path;
+            }
+            if ([identifier isEqualToString:@"kSizeIdentifier"]) {
+                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+                textFieldCell.stringValue = [NSString stringWithFormat:@"%0.2f", imageModel.volume / 1024.0];
+            }
+        }
+    } else if ([item isKindOfClass:[NSArray class]]) {
+        NSArray *array = (NSArray *)item;
+        DDImageModel *imageModel = (DDImageModel *)array.firstObject;
         if (imageModel) {
             if ([identifier isEqualToString:@"kImageIdentifier"]) {
                 NSImageCell *imageCell = (NSImageCell*)cell;
@@ -214,8 +239,10 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     [self.analysisManager loadAllImagesCompleted:^(BOOL succeed) {
         if (succeed) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
-            [strongSelf.analysisManager findSimilarImagesWithLevel:self.similarity
-                                                         completed:^(BOOL succeed) {
+
+            [strongSelf.analysisManager findSimilarImagesWithShapeLevel:strongSelf.shapeSimilarity
+                                                             colorLevel:strongSelf.colorSimilarity
+                                                              completed:^(BOOL succeed) {
 
                 __strong __typeof(weakSelf) strongSelf = weakSelf;
                 if (succeed) {

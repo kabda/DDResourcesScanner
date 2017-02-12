@@ -14,6 +14,8 @@
 @property (nonatomic, assign) long       volume;
 @property (nonatomic, copy  ) NSString   *name;
 @property (nonatomic, assign) NSUInteger scale;
+@property (nonatomic, assign) NSSize     size;
+@property (nonatomic, strong) NSColor    *mainColor;
 @property (nonatomic, copy  ) NSString   *fingerprint;
 @property (nonatomic, strong) NSImage    *image;
 @end
@@ -27,6 +29,8 @@
     model.name          = [DDImageModel imageNameForPath:path];
     model.scale         = [DDImageModel imageScaleForPath:path];
     model.image         = [DDImageModel imageForPath:path];
+    model.size          = model.image.size;
+    model.mainColor     = model.image.mainColor;
     model.fingerprint   = model.image.fingerprint;
     return model;
 }
