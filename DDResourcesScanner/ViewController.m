@@ -37,8 +37,8 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
     self.workFlow = DDScannerWorkFlowWaitingSelectPath;
     self.contentLabel.stringValue = @"";
 
-//    self.resourcesView.dataSource = self;
-//    self.resourcesView.delegate = self;
+    self.resourcesView.dataSource = self;
+    self.resourcesView.delegate = self;
 
     self.analysisManager.delegate = self;
 }
@@ -65,25 +65,41 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
 
 #pragma mark - NSOutlineViewDataSource
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
-    if ([item isKindOfClass:[DDNode class]]) {
-        return ((DDNode *)item).children.count;
+//    if ([item isKindOfClass:[DDNode class]]) {
+//        return ((DDNode *)item).children.count;
+//    }
+//    return self.analysisManager.tree.rootNode.children.count;
+    if (!item) {
+        return 1;
     }
-    return 1;
+    if ([item isKindOfClass:[NSArray class]]) {
+        return ((NSArray *)item).count;
+    }
+    return 0;
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
-    if ([item isKindOfClass:[DDNode class]]) {
-        return ((DDNode *)item).children[index];
+    if ([item isKindOfClass:[NSArray class]]) {
+        return (NSArray *)item[index];
     }
-    return self.analysisManager.tree.rootNode;
+    return self.analysisManager.images[index];
+//    if ([item isKindOfClass:[DDNode class]]) {
+//        return ((DDNode *)item).children[index];
+//    }
+//    return self.analysisManager.tree.rootNode.children[index];
 }
 
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-    if ([item isKindOfClass:[DDNode class]]) {
-        return (((DDNode *)item).children > 0);
+    if ([item isKindOfClass:[NSArray class]]) {
+        return ((NSArray *)item).count > 0;
     }
-    return NO;
+    return NO;;
+
+//    if ([item isKindOfClass:[DDNode class]]) {
+//        return (((DDNode *)item).children > 0);
+//    }
+//    return NO;
 }
 
 #pragma mark - NSOutlineViewDelegate
@@ -97,10 +113,9 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
                item:(id)item {
 
     NSString *identifier = tableColumn.identifier;
-    if ([item isKindOfClass:[DDNode class]]) {
-        DDNode *node = (DDNode *)item;
-        if (node.object) {
-            DDImageModel *imageModel = (DDImageModel *)node.object;
+    if ([item isKindOfClass:[DDImageModel class]]) {
+        DDImageModel *imageModel = (DDImageModel *)item;
+        if (imageModel) {
             if ([identifier isEqualToString:@"kImageIdentifier"]) {
                 NSImageCell *imageCell = (NSImageCell*)cell;
                 imageCell.image = imageModel.image;
@@ -124,6 +139,36 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
             textFieldCell.stringValue = @"根目录";
         }
     }
+
+
+//    NSString *identifier = tableColumn.identifier;
+//    if ([item isKindOfClass:[DDNode class]]) {
+//        DDNode *node = (DDNode *)item;
+//        if (node.object) {
+//            DDImageModel *imageModel = (DDImageModel *)node.object;
+//            if ([identifier isEqualToString:@"kImageIdentifier"]) {
+//                NSImageCell *imageCell = (NSImageCell*)cell;
+//                imageCell.image = imageModel.image;
+//            }
+//            if ([identifier isEqualToString:@"kNameIdentifier"]) {
+//                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+//                textFieldCell.stringValue = imageModel.name;
+//            }
+//            if ([identifier isEqualToString:@"kPathIdentifier"]) {
+//                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+//                textFieldCell.stringValue = imageModel.path;
+//            }
+//            if ([identifier isEqualToString:@"kSizeIdentifier"]) {
+//                NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+//                textFieldCell.stringValue = [NSString stringWithFormat:@"%0.2f", imageModel.volume / 1024.0];
+//            }
+//        }
+//    } else {
+//        if ([identifier isEqualToString:@"kNameIdentifier"]) {
+//            NSTextFieldCell * textFieldCell = (NSTextFieldCell*)cell;
+//            textFieldCell.stringValue = @"根目录";
+//        }
+//    }
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item {

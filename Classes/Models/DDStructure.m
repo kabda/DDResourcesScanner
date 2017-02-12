@@ -90,11 +90,11 @@
     if (!rootNode) {
         return;
     }
-    if (handler) {
-        handler(rootNode);
-    }
     for (DDNode *childNode in rootNode.children.copy) {
         [DDTree traverse:childNode handler:handler];
+    }
+    if (handler) {
+        handler(rootNode);
     }
 }
 

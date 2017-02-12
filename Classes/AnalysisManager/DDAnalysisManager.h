@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DDStructure.h"
+//#import "DDStructure.h"
 #import "DDImageModel.h"
 
 @class DDAnalysisManager;
@@ -17,7 +17,10 @@
 @end
 
 @interface DDAnalysisManager : NSObject
-@property (nonatomic, strong, readonly) DDTree    *tree;
+//@property (nonatomic, strong, readonly) DDTree    *tree;
+
+@property (nonatomic, strong, readonly) NSMutableArray *images;
+
 @property (nonatomic, assign, readonly) long long total;
 @property (nonatomic, assign, readonly) long long similarity;
 
