@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, DDScannerWorkFlow) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     self.similarity = kDefaultSimilarityValue;
     self.workFlow = DDScannerWorkFlowWaitingSelectPath;
     self.contentLabel.stringValue = @"";
